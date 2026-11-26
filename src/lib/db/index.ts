@@ -1,5 +1,6 @@
 import path from "node:path";
 import { mkdirSync } from "node:fs";
+import { readMigrationFiles } from "drizzle-orm/migrator";
 import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 import * as schema from "./schema";
 
@@ -12,11 +13,15 @@ const holder = globalThis as unknown as { __keepsakeDb?: Holder };
 holder.__keepsakeDb ??= {};
 
 const migrationsFolder = path.join(process.cwd(), "drizzle");
+/** Any fixed number: serializes first-start setup when several servers boot at once. */
+const SETUP_LOCK_KEY = 72417001;
+
+const isServerless = !!(process.env.VERCEL || process.env.NETLIFY || process.env.AWS_LAMBDA_FUNCTION_NAME);
 
 /**
  * Connects lazily on first use.
- * - DATABASE_URL set  → any Postgres (Supabase, Neon, Render, RDS…)
- * - otherwise         → embedded Postgres (PGlite) stored in ./.data/pglite
+ * - DATABASE_URL (or POSTGRES_URL) set → any Postgres (Neon, Supabase, Render, Railway, RDS…)
+ * - otherwise                         → embedded Postgres (PGlite) stored in ./.data/pglite
  * Pending migrations are applied automatically, and an empty catalog is
  * filled with the sample Toronto experiences (disable with SEED_SAMPLE_DATA=false).
  */
@@ -37,39 +42,95 @@ export async function closeDb() {
   await c.close();
 }
 
+export function databaseUrl(): string | undefined {
+  return process.env.DATABASE_URL || process.env.POSTGRES_URL || undefined;
+}
+
 async function connect(): Promise<{ db: DB; close: () => Promise<void> }> {
-  const url = process.env.DATABASE_URL;
-  let conn: { db: DB; close: () => Promise<void> };
+  const url = databaseUrl();
+  return url ? connectPostgres(url) : connectPglite();
+}
 
-  if (url) {
-    const { Pool } = await import("pg");
-    const { drizzle } = await import("drizzle-orm/node-postgres");
-    const { migrate } = await import("drizzle-orm/node-postgres/migrator");
-    const needsSsl = !/localhost|127\.0\.0\.1/.test(url) && !/sslmode=disable/.test(url);
-    const pool = new Pool({ connectionString: url, ssl: needsSsl ? { rejectUnauthorized: false } : undefined, max: 5 });
-    const db = drizzle(pool, { schema });
-    await migrate(db, { migrationsFolder });
-    conn = { db: db as unknown as DB, close: () => pool.end() };
-  } else {
-    const { PGlite } = await import("@electric-sql/pglite");
-    const { drizzle } = await import("drizzle-orm/pglite");
-    const { migrate } = await import("drizzle-orm/pglite/migrator");
-    const dir = process.env.PGLITE_DIR ?? path.join(process.cwd(), ".data", "pglite");
-    let client: InstanceType<typeof PGlite>;
-    if (dir === "memory://") {
-      client = new PGlite();
-    } else {
-      mkdirSync(dir, { recursive: true });
-      client = new PGlite(dir);
+type RawClient = { query: (text: string, params?: unknown[]) => Promise<{ rows: Record<string, unknown>[] }> };
+
+/**
+ * First-start setup in ONE transaction: migrations, then the sample catalog if the database is empty.
+ * A transaction-scoped advisory lock makes concurrent cold starts wait for each other, and it is
+ * released automatically on commit — safe even through connection poolers (Neon, Supabase…).
+ */
+async function runSetup(raw: RawClient, setupDb: DB, lock: boolean) {
+  await raw.query("begin");
+  try {
+    if (lock) await raw.query("select pg_advisory_xact_lock($1)", [SETUP_LOCK_KEY]);
+    await applyMigrations(raw);
+    if (process.env.SEED_SAMPLE_DATA !== "false") {
+      const { seedIfEmpty } = await import("./seed");
+      await seedIfEmpty(setupDb);
     }
-    const db = drizzle(client, { schema });
-    await migrate(db, { migrationsFolder });
-    conn = { db: db as unknown as DB, close: () => client.close() };
+    await raw.query("commit");
+  } catch (err) {
+    await raw.query("rollback").catch(() => {});
+    throw err;
   }
+}
 
-  if (process.env.SEED_SAMPLE_DATA !== "false") {
-    const { seedIfEmpty } = await import("./seed");
-    await seedIfEmpty(conn.db);
+/** Same bookkeeping as drizzle's migrator (drizzle.__drizzle_migrations), run inside our transaction. */
+async function applyMigrations(raw: RawClient) {
+  const migrations = readMigrationFiles({ migrationsFolder });
+  await raw.query('create schema if not exists "drizzle"');
+  await raw.query('create table if not exists "drizzle"."__drizzle_migrations" (id serial primary key, hash text not null, created_at bigint)');
+  const { rows } = await raw.query('select created_at from "drizzle"."__drizzle_migrations" order by created_at desc limit 1');
+  const last = rows[0] ? Number(rows[0].created_at) : -1;
+  for (const m of migrations) {
+    if (m.folderMillis <= last) continue;
+    for (const statement of m.sql) if (statement.trim()) await raw.query(statement);
+    await raw.query('insert into "drizzle"."__drizzle_migrations" ("hash", "created_at") values ($1, $2)', [m.hash, m.folderMillis]);
   }
-  return conn;
+}
+
+async function connectPostgres(url: string) {
+  const { Pool } = await import("pg");
+  const { drizzle } = await import("drizzle-orm/node-postgres");
+
+  // Hosted Postgres needs TLS. Certificates of some providers aren't in Node's trust store,
+  // so encrypt without pinning the CA (the usual setting for managed databases).
+  const u = new URL(url);
+  const sslmode = u.searchParams.get("sslmode");
+  u.searchParams.delete("sslmode");
+  const local = ["localhost", "127.0.0.1", "[::1]"].includes(u.hostname);
+  const pool = new Pool({
+    connectionString: u.toString(),
+    ssl: local || sslmode === "disable" ? undefined : { rejectUnauthorized: false },
+    max: Number(process.env.DATABASE_POOL_MAX ?? (isServerless ? 3 : 5)),
+  });
+
+  const client = await pool.connect();
+  try {
+    await runSetup(client as unknown as RawClient, drizzle(client, { schema }) as unknown as DB, true);
+  } finally {
+    client.release();
+  }
+  const db = drizzle(pool, { schema });
+  return { db: db as unknown as DB, close: () => pool.end() };
+}
+
+async function connectPglite() {
+  const { PGlite } = await import("@electric-sql/pglite");
+  const { drizzle } = await import("drizzle-orm/pglite");
+  // On serverless hosts only /tmp is writable — and it is wiped regularly, so data is temporary there.
+  const defaultDir = isServerless ? "/tmp/keepsake-pglite" : path.join(process.cwd(), ".data", "pglite");
+  const dir = process.env.PGLITE_DIR ?? defaultDir;
+  if (isServerless && !process.env.PGLITE_DIR) {
+    console.warn("[keepsake] No DATABASE_URL set: using a temporary database. Orders will be lost — connect Postgres before taking real orders.");
+  }
+  let client: InstanceType<typeof PGlite>;
+  if (dir === "memory://") {
+    client = new PGlite();
+  } else {
+    mkdirSync(dir, { recursive: true });
+    client = new PGlite(dir);
+  }
+  const db = drizzle(client, { schema }) as unknown as DB;
+  await runSetup(client as unknown as RawClient, db, false);
+  return { db, close: () => client.close() };
 }

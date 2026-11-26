@@ -7,6 +7,22 @@ export async function tick() {
   return { sent, released };
 }
 
+let lastOpportunisticTick = 0;
+
+/**
+ * Runs the tick at most once a minute per server instance. Called after page views, so
+ * scheduled e-certificates still go out on hosts without background timers (Vercel, Netlify).
+ */
+export async function maybeTick() {
+  if (process.env.DISABLE_SCHEDULER === "true" || Date.now() - lastOpportunisticTick < 60_000) return;
+  lastOpportunisticTick = Date.now();
+  try {
+    await tick();
+  } catch (err) {
+    console.error("[keepsake] background tick failed", err);
+  }
+}
+
 const g = globalThis as unknown as { __keepsakeScheduler?: NodeJS.Timeout };
 
 /**

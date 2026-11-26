@@ -1,12 +1,16 @@
+import { after } from "next/server";
 import { GiftBoxProvider } from "@/components/gift-box/GiftBoxProvider";
 import { GiftDrawer } from "@/components/gift-box/GiftDrawer";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HelpWidget } from "@/components/HelpWidget";
 import { paymentMode } from "@/lib/payments";
+import { maybeTick } from "@/lib/scheduler";
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   const testMode = paymentMode() === "test";
+  // Send any scheduled e-certificates once the page has been delivered (throttled to once a minute).
+  after(() => maybeTick());
   return (
     <GiftBoxProvider>
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-full focus:bg-paper focus:px-4 focus:py-2">

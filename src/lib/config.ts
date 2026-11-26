@@ -4,12 +4,22 @@
  * Values read by the browser must use NEXT_PUBLIC_* env vars.
  */
 
+/** The public address of the site: set NEXT_PUBLIC_SITE_URL, or let Vercel/Netlify provide it. */
+function detectSiteUrl(): string {
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL;
+  if (explicit) return explicit;
+  const vercel = process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  if (vercel) return `https://${vercel}`;
+  if (process.env.NETLIFY && process.env.URL) return process.env.URL;
+  return "http://localhost:3000";
+}
+
 export const site = {
   name: "Keepsake",
   tagline: "Experiences worth keeping",
   description:
     "Experience gifts in Toronto. Choose up to five experiences, pay only for the most expensive, and let them choose the one they love.",
-  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, ""),
+  url: detectSiteUrl().replace(/\/$/, ""),
   // TODO before launch: replace with your real contact details.
   supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? "hello@keepsake.example",
   supportPhone: process.env.NEXT_PUBLIC_SUPPORT_PHONE ?? "(416) 555-0199",

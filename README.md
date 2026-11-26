@@ -65,6 +65,29 @@ npm run build && npm start   # production build
 | Validity | `NEXT_PUBLIC_CERTIFICATE_VALID_MONTHS` (default 0 = never expires) |
 | Packaging and delivery fees, box colours, greeting ideas | `src/lib/config.ts` |
 
+## Put it online (about 10 minutes, free to start)
+
+The website needs a host to be visible on the internet. The quickest path for this stack is **Vercel** (hosting) with **Neon** (database), both with free plans:
+
+1. Go to **vercel.com** → *Sign Up* → **Continue with GitHub** (the GitHub account that owns this repository).
+2. *Add New… → Project*, find **Gifting-Business-** and click **Import**. (Not listed? Click *Adjust GitHub App Permissions* and give Vercel access to the repository.)
+3. Open **Environment Variables** and add:
+   | Name | Value |
+   |---|---|
+   | `ADMIN_PASSWORD` | a password you choose, for `/admin` |
+   | `SESSION_SECRET` | any long random text |
+   | `ALLOW_TEST_PAYMENTS` | `true` — simulated payments until Stripe is connected |
+4. Click **Deploy**.
+5. In the new project open the **Storage** tab → **Create Database** → **Neon** (Serverless Postgres) → free plan, region closest to Toronto (e.g. US East) → **Connect** it to the project. This adds `DATABASE_URL` for you. *(Until this step the site runs on a temporary database that is wiped regularly.)*
+6. **Deployments** → ⋯ on the latest one → **Redeploy**. Then click **Visit** — your site lives at an address like `gifting-business-xxxx.vercel.app`, and the admin at `/admin`.
+
+The database tables and the sample catalog are created automatically on the first visit. Good to know:
+
+- Vercel's free *Hobby* plan is for non-commercial use: perfect for previewing and testing. When you start selling, upgrade to *Pro* or use a host whose free tier allows commercial use (e.g. Netlify).
+- When you add your own domain, set `NEXT_PUBLIC_SITE_URL` to it (otherwise the Vercel address is detected automatically).
+- Scheduled e-certificates go out on the first visit after their time. For minute-exact delivery, set `CRON_SECRET` and have a free scheduler (e.g. cron-job.org) call `https://YOUR-SITE/api/cron/tick` every minute with the header `Authorization: Bearer YOUR_CRON_SECRET`.
+- **Other hosts:** anything that runs `npm run build && npm start` with a `DATABASE_URL` (Netlify, Render, Railway, Fly.io, a VPS). On long-running servers you can even skip `DATABASE_URL` if you mount a persistent disk at `./.data`.
+
 ## Going live — checklist
 
 The admin dashboard shows this checklist with live status.
@@ -73,11 +96,9 @@ The admin dashboard shows this checklist with live status.
 2. **Your real catalog** — in Admin → Experiences, edit or hide the sample experiences and add your partners' offers and photos. Then **remove the sample reviews** (Admin → Reviews) and set `SEED_SAMPLE_DATA=false`. The sample venues, reviews and photos are placeholders: launching with them would mislead customers.
 3. **Stripe** — create a Stripe account (Canada, CAD), set `STRIPE_SECRET_KEY`, add the webhook `https://YOUR-DOMAIN/api/payments/stripe/webhook` for `checkout.session.completed`, and set `STRIPE_WEBHOOK_SECRET`. Do one real test purchase with a `sk_test_` key first.
 4. **Email** — any SMTP provider (Postmark, Resend, SendGrid, Mailgun…): set `SMTP_URL`, `MAIL_FROM` and optionally `ADMIN_NOTIFY_EMAIL`, and verify your sending domain (SPF/DKIM).
-5. **Database** — set `DATABASE_URL` to a managed Postgres (Supabase, Neon, Render, Railway…). Tables are created automatically on first start.
+5. **Database** — set `DATABASE_URL` to a managed Postgres (Neon, Supabase, Render, Railway…). Tables are created automatically on first start, safely even when several servers start at once.
 6. **Admin** — set `ADMIN_PASSWORD` and `SESSION_SECRET`.
-7. **Hosting** — any Node host works with `npm run build && npm start`:
-   - *Render / Railway / Fly / a VPS* (long-running): scheduled e-certificates are sent automatically every minute.
-   - *Vercel* (serverless): use Postgres via `DATABASE_URL`, and add a cron job calling `GET /api/cron/tick` every minute with `Authorization: Bearer $CRON_SECRET`.
+7. **Hosting** — see *Put it online* above. Remove `ALLOW_TEST_PAYMENTS` once Stripe is live.
 8. **Legal & tax** — the legal pages are templates. Have a Canadian lawyer review them, especially Ontario's gift-card rules (no expiry dates or dormancy fees on most gift cards) and refund terms, and ask an accountant how HST applies to gift certificates, packaging and delivery fees in your setup.
 
 ## Project structure

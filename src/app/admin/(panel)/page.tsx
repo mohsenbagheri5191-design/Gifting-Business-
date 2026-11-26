@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { and, count, desc, eq, gt, sql } from "drizzle-orm";
-import { getDb } from "@/lib/db";
+import { databaseUrl, getDb } from "@/lib/db";
 import * as s from "@/lib/db/schema";
 import { SAMPLE_REVIEW_EMAIL } from "@/lib/db/seed-data";
 import { formatDateTime, formatMoney } from "@/lib/format";
@@ -38,7 +38,7 @@ export default async function Dashboard() {
     [paymentMode() === "stripe", "Stripe payments connected", "Set STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET"],
     [!!process.env.SMTP_URL, "Email sending connected", "Set SMTP_URL and MAIL_FROM (otherwise emails stay in Emails)"],
     [!!process.env.ADMIN_PASSWORD, "Admin password set", "Set ADMIN_PASSWORD and SESSION_SECRET"],
-    [!!process.env.DATABASE_URL, "Production database connected", "Set DATABASE_URL (Postgres)"],
+    [!!databaseUrl(), "Production database connected", "Set DATABASE_URL (Postgres). Without it, data on serverless hosts is temporary"],
     [!site.supportEmail.endsWith(".example"), "Real contact details", "Edit src/lib/config.ts or NEXT_PUBLIC_SUPPORT_* variables"],
     [sampleReviews.n === 0, "Sample reviews removed", "Admin → Reviews → Remove sample reviews"],
   ];

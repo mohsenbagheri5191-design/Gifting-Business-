@@ -141,11 +141,16 @@ try {
   const card = admin.locator("div", { hasText: "Comedy Night Out" }).filter({ has: admin.getByRole("button", { name: /Confirm & email/ }) }).last();
   await shot(admin, "admin-bookings");
   await card.getByRole("button", { name: /Confirm & email/ }).click();
-  await admin.waitForLoadState("networkidle");
+  // The confirmed booking leaves the "To confirm" list once the action has been saved.
+  await card.waitFor({ state: "detached" });
 
-  await yashar.goto(bookingUrl, { waitUntil: "networkidle" });
-  await yashar.getByText("You're booked").waitFor();
-  assert(true, "Yashar sees the booking confirmed");
+  let confirmed = false;
+  for (let attempt = 0; attempt < 5 && !confirmed; attempt++) {
+    await yashar.goto(bookingUrl, { waitUntil: "networkidle" });
+    confirmed = await yashar.getByText("You're booked").isVisible();
+    if (!confirmed) await yashar.waitForTimeout(1000);
+  }
+  assert(confirmed, "Yashar sees the booking confirmed");
   await shot(yashar, "booking-confirmed");
 
   /* ------------------------------------- leftover balance + top-up */
