@@ -1,0 +1,24 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# local database (embedded Postgres) and uploads
+.data/
+
+# env files (keep the example)
+.env
+.env.*
+!.env.example
+
+# logs / os
+npm-debug.log*
+.DS_Store
+
+# test output
+test-results/
+e2e-screenshots/
