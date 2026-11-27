@@ -2,6 +2,8 @@
 
 A complete experience-gifting website and back office, modelled on the business mechanics of [bodo.ua](https://www.bodo.ua/ua/) with an original, calm and organic design.
 
+**Live (test mode):** https://cadeau-gifts.netlify.app · admin at [/admin](https://cadeau-gifts.netlify.app/admin) — hosted on Netlify with Netlify Database.
+
 > **Dexter wants to give his brother Yashar a memorable experience.** He puts a lakeside dinner, a comedy night and a pottery workshop into one gift, and **pays only for the most expensive** ($240). Cadeau issues a **random 14-character code** linked to those three experiences, wraps it as an e-certificate (or a gift box), and delivers it. Yashar enters the code on the website, sees his gift, **chooses the one he wants** (or swaps for anything else up to $240), picks his dates, and the team confirms the booking. Anything he doesn't spend stays on the same code for later; anything pricier, he tops up.
 
 ![Home](docs/screenshots/01-home.jpg)
