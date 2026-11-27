@@ -1,4 +1,5 @@
-# Netlify builds this Next.js app with its Next.js runtime (added automatically).
+# Netlify builds this Next.js app with its Next.js runtime (OpenNext adapter). It is declared
+# here so projects created without a Git import get it too; Netlify installs the latest version.
 # Database: the @netlify/database dependency provisions Netlify Database (Postgres), and the SQL
 # files in netlify/database/migrations are applied before each deploy goes live.
 [build]
@@ -8,3 +9,6 @@
 [build.environment]
   NODE_VERSION = "22"
   NEXT_TELEMETRY_DISABLED = "1"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
