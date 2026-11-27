@@ -86,7 +86,7 @@ export function HeaderClient({ categories }: { categories: Cat[] }) {
           <button className="-ml-2 grid h-11 w-11 place-items-center rounded-full hover:bg-sand lg:hidden" aria-label="Open menu" onClick={() => setMobile(true)}>
             <Menu className="h-5 w-5" />
           </button>
-          <Link href="/" aria-label="Keepsake — home" className="shrink-0">
+          <Link href="/" aria-label="Cadeau — home" className="shrink-0">
             <Logo />
           </Link>
 

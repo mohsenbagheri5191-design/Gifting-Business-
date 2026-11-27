@@ -4,7 +4,7 @@ import type { SP } from "@/lib/search-params";
 
 export const metadata: Metadata = {
   title: "All experiences",
-  description: "Browse every Keepsake experience in Toronto and beyond — dining, spa days, adventures, workshops, getaways and more.",
+  description: "Browse every Cadeau experience in Toronto and beyond — dining, spa days, adventures, workshops, getaways and more.",
 };
 
 export default async function ExperiencesPage({ searchParams }: { searchParams: Promise<SP> }) {

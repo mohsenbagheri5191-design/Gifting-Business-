@@ -15,7 +15,7 @@ export function LoginForm({ devHint }: { devHint: boolean }) {
       <button className="btn btn-primary w-full" disabled={pending}>
         {pending ? "Signing in…" : "Sign in"}
       </button>
-      {devHint && <p className="text-xs text-muted">Development password: keepsake-admin (set ADMIN_PASSWORD to change it).</p>}
+      {devHint && <p className="text-xs text-muted">Development password: cadeau-admin (set ADMIN_PASSWORD to change it).</p>}
     </form>
   );
 }

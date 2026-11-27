@@ -46,7 +46,7 @@ const initial: Form = {
   acceptTerms: false,
 };
 
-const KEY = "keepsake.checkout.v1";
+const KEY = "cadeau.checkout.v1";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_RE = /^\+?[\d\s().-]{7,20}$/;
 const POSTAL_RE = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;

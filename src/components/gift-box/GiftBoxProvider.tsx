@@ -38,8 +38,8 @@ type Ctx = {
 };
 
 const GiftBoxContext = createContext<Ctx | null>(null);
-const GIFT_KEY = "keepsake.gift.v1";
-const WISH_KEY = "keepsake.wish.v1";
+const GIFT_KEY = "cadeau.gift.v1";
+const WISH_KEY = "cadeau.wish.v1";
 
 function read<T>(key: string, fallback: T): T {
   try {

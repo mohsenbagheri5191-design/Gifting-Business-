@@ -72,7 +72,7 @@ export function ReviewForm({ experienceId }: { experienceId: number }) {
       </label>
       <label className="flex items-start gap-3 text-sm text-ink-soft">
         <input type="checkbox" name="consent" required className="mt-1 h-4 w-4 accent-[var(--color-moss)]" />
-        I agree that my review and first name may be shown on Keepsake.
+        I agree that my review and first name may be shown on Cadeau.
       </label>
       {state === "error" && <p className="text-sm text-clay-deep">{error}</p>}
       <button className="btn btn-primary" disabled={state === "sending"}>

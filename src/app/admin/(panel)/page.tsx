@@ -38,7 +38,7 @@ export default async function Dashboard() {
     [paymentMode() === "stripe", "Stripe payments connected", "Set STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET"],
     [!!process.env.SMTP_URL, "Email sending connected", "Set SMTP_URL and MAIL_FROM (otherwise emails stay in Emails)"],
     [!!process.env.ADMIN_PASSWORD, "Admin password set", "Set ADMIN_PASSWORD and SESSION_SECRET"],
-    [!!databaseUrl(), "Production database connected", "Set DATABASE_URL (Postgres). Without it, data on serverless hosts is temporary"],
+    [!!databaseUrl(), "Production database connected", "Use Netlify Database or set DATABASE_URL (Postgres). Without one, data on serverless hosts is temporary"],
     [!site.supportEmail.endsWith(".example"), "Real contact details", "Edit src/lib/config.ts or NEXT_PUBLIC_SUPPORT_* variables"],
     [sampleReviews.n === 0, "Sample reviews removed", "Admin → Reviews → Remove sample reviews"],
   ];

@@ -36,7 +36,7 @@ export function WishlistView() {
   async function share() {
     const url = `${window.location.origin}/wishlist?ids=${wishlist.join(",")}`;
     try {
-      if (navigator.share) await navigator.share({ title: "My Keepsake wishlist", url });
+      if (navigator.share) await navigator.share({ title: "My Cadeau wishlist", url });
       else {
         await navigator.clipboard.writeText(url);
         setCopied(true);

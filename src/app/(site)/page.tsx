@@ -39,8 +39,8 @@ export default async function HomePage() {
         <div className="container-page relative grid items-center gap-14 pb-16 pt-10 sm:pt-14 lg:grid-cols-12 lg:pb-24">
           <div className="animate-rise lg:col-span-6">
             <p className="eyebrow">Experience gifts · Toronto</p>
-            <h1 className="mt-5 text-[3.2rem] leading-[1] sm:text-7xl xl:text-[5.6rem]">
-              Give a moment they&apos;ll <em className="font-display italic text-clay">keep</em>.
+            <h1 className="mt-5 text-[3.1rem] leading-[1.04] sm:text-7xl xl:text-[5.4rem]">
+              Give a moment they&apos;ll <em className="not-italic text-clay">keep</em>.
             </h1>
             <p className="mt-7 max-w-xl text-lg leading-relaxed text-ink-soft sm:text-xl">
               Put up to {rules.maxGiftItems} experiences in one gift — a tasting menu, a spa day, a sail at sunset. You pay only for the most expensive. They choose the one they love.
@@ -198,7 +198,7 @@ export default async function HomePage() {
       <section className="relative overflow-hidden bg-forest py-24 text-linen">
         <div className="container-page">
           <div className="mb-12 max-w-2xl">
-            <p className="eyebrow !text-sage">Why Keepsake</p>
+            <p className="eyebrow !text-sage">Why Cadeau</p>
             <h2 className="mt-3 text-[2.1rem] text-linen sm:text-5xl">Thoughtful by design</h2>
           </div>
           <Benefits dark />
@@ -216,7 +216,7 @@ export default async function HomePage() {
                 <Stars value={stats.average} size={22} />
               </span>
             }
-            description={`From ${stats.count} reviews by people who gave — and received — a Keepsake.`}
+            description={`From ${stats.count} reviews by people who gave — and received — a Cadeau.`}
             action={{ href: "/reviews", label: "Read all reviews" }}
           />
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -278,12 +278,12 @@ export default async function HomePage() {
                 The best gifts aren&apos;t things — they&apos;re moments. A tasting menu at the chef&apos;s counter, a sunset sail past the Toronto Islands, an afternoon at the pottery wheel: experiences become stories, and stories are what people keep.
               </p>
               <p>
-                Keepsake makes giving them simple. Instead of guessing, add up to {rules.maxGiftItems} experiences to one gift. You pay only for the most expensive one, and the person you&apos;re celebrating chooses the one that suits them — or swaps it for anything else up to the gift&apos;s value.
+                Cadeau makes giving them simple. Instead of guessing, add up to {rules.maxGiftItems} experiences to one gift. You pay only for the most expensive one, and the person you&apos;re celebrating chooses the one that suits them — or swaps it for anything else up to the gift&apos;s value.
               </p>
             </div>
             <div>
               <p>
-                Every gift carries a unique 14-character code. Your recipient enters it at <Link href="/redeem">keepsake/redeem</Link>, chooses their experience and preferred dates, and our team confirms the booking with the venue. Anything left over stays on the same code for next time.
+                Every gift carries a unique 14-character code. Your recipient enters it on our <Link href="/redeem">redeem page</Link>, chooses their experience and preferred dates, and our team confirms the booking with the venue. Anything left over stays on the same code for next time.
               </p>
               <p>
                 Gifts arrive as an e-certificate — instantly or at the time you choose — or as a hand-finished gift box by same-day courier in Toronto, Canada Post across the country, or pickup from our studio. Looking for ideas? Browse gifts <Link href="/gifts/for-her">for her</Link>, <Link href="/gifts/for-him">for him</Link>, <Link href="/gifts/for-couples">for couples</Link> or for a <Link href="/occasions/birthday">birthday</Link>.
@@ -324,11 +324,12 @@ function RotatingBadge() {
         <defs>
           <path id="circle" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0" />
         </defs>
-        <text fontSize="9.2" letterSpacing="2.6" fill="currentColor" fontFamily="var(--font-sans)" fontWeight="600">
-          <textPath href="#circle">PAY FOR ONE · CHOOSE FROM FIVE ·</textPath>
+        {/* Spacing tuned so the phrase fills the 232-unit circle exactly; the no-break space keeps a gap before it repeats. */}
+        <text fontSize="9.2" letterSpacing="2.1" fill="currentColor" fontFamily="var(--font-sans)" fontWeight="600">
+          <textPath href="#circle">{"PAY FOR ONE · CHOOSE FROM FIVE · "}</textPath>
         </text>
       </svg>
-      <span className="font-display text-3xl italic">5:1</span>
+      <span className="font-display text-3xl">5:1</span>
     </div>
   );
 }

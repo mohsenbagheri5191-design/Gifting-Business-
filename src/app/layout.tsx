@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource-variable/fraunces/full.css";
-import "@fontsource-variable/fraunces/full-italic.css";
-import "@fontsource-variable/manrope/index.css";
+import "@fontsource/tenor-sans/index.css";
+import "@fontsource-variable/figtree/index.css";
+import "@fontsource-variable/figtree/wght-italic.css";
 import "./globals.css";
 import { site } from "@/lib/config";
 

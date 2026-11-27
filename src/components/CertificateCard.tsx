@@ -5,7 +5,7 @@ import { site } from "@/lib/config";
 import { cn } from "@/lib/ui";
 
 /**
- * The Keepsake certificate — used for the e-certificate, the printed card,
+ * The Cadeau certificate — used for the e-certificate, the printed card,
  * the order confirmation and the checkout preview.
  */
 export function CertificateCard({
@@ -40,7 +40,7 @@ export function CertificateCard({
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-2 text-moss">
             <LogoMark className="h-7" />
-            <span className="font-display text-xl">{site.name}</span>
+            <span className="mr-[-0.26em] font-display text-[1.05rem] uppercase leading-none tracking-[0.26em]">{site.name}</span>
           </span>
           <span className="eyebrow">Gift certificate</span>
         </div>
@@ -50,7 +50,7 @@ export function CertificateCard({
         {fromName && <p className="mt-2 text-sm text-ink-soft">with love from {fromName}</p>}
 
         {message && (
-          <blockquote className="mt-6 border-l-2 border-clay pl-4 font-display text-lg italic leading-relaxed text-ink-soft">
+          <blockquote className="mt-6 border-l-2 border-clay pl-4 font-display text-lg leading-relaxed text-ink-soft">
             “{message}”
           </blockquote>
         )}

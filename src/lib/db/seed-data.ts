@@ -7,7 +7,7 @@
  * Photos: Unsplash (free to use under the Unsplash License).
  */
 
-export const SAMPLE_REVIEW_EMAIL = "sample-review@keepsake.example";
+export const SAMPLE_REVIEW_EMAIL = "sample-review@cadeau.example";
 
 const U = (id: string) => `https://images.unsplash.com/photo-${id}`;
 

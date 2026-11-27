@@ -7,7 +7,7 @@ import { rules } from "@/lib/config";
 
 export const metadata: Metadata = {
   title: "Redeem a gift",
-  description: "Received a Keepsake? Enter your 14-character code to choose your experience and book a date.",
+  description: "Received a Cadeau? Enter your 14-character code to choose your experience and book a date.",
 };
 
 const steps = [
@@ -59,12 +59,12 @@ export default async function RedeemPage({ searchParams }: { searchParams: Promi
         <div className="lg:col-span-4">
           <p className="eyebrow">Not quite right?</p>
           <h2 className="mt-3 text-4xl">Your gift, your way</h2>
-          <p className="mt-3 text-ink-soft">Every Keepsake is flexible. Here&apos;s what you can do with yours.</p>
+          <p className="mt-3 text-ink-soft">Every Cadeau is flexible. Here&apos;s what you can do with yours.</p>
         </div>
         <div className="lg:col-span-8">
           <FaqList
             items={[
-              { q: "Choose something else, up to the gift's value", a: <p>Not feeling the ideas in your gift? Browse everything on Keepsake — anything priced up to your gift&apos;s value is fully covered.</p> },
+              { q: "Choose something else, up to the gift's value", a: <p>Not feeling the ideas in your gift? Browse everything on Cadeau — anything priced up to your gift&apos;s value is fully covered.</p> },
               { q: "Upgrade by paying the difference", a: <p>Fallen for something bigger — or want the &ldquo;for two&rdquo; version? Choose it and pay only the difference online when you book.</p> },
               { q: "Split it across several experiences", a: <p>If you choose something that costs less than your gift, the rest stays on the same code. Use it for another experience whenever you like.</p> },
               {

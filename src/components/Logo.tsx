@@ -1,7 +1,7 @@
 import { site } from "@/lib/config";
 import { cn } from "@/lib/ui";
 
-/** The Keepsake mark: an arched doorway with a sprout — a moment kept and growing. */
+/** The Cadeau mark: an arched doorway with a sprout — a moment opening up and growing. */
 export function LogoMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 40" className={cn("h-8 w-auto", className)} aria-hidden fill="none">
@@ -14,13 +14,13 @@ export function LogoMark({ className }: { className?: string }) {
   );
 }
 
+/** Mark + wordmark. The wordmark is set in widely spaced capitals of the display face. */
 export function Logo({ className, light = false }: { className?: string; light?: boolean }) {
   return (
-    <span className={cn("inline-flex items-center gap-2.5", light ? "text-linen" : "text-moss", className)}>
+    <span className={cn("inline-flex items-center gap-3", light ? "text-linen" : "text-moss", className)}>
       <LogoMark className="h-8" />
-      <span className="font-display text-[1.7rem] leading-none tracking-[-0.03em]" style={{ fontVariationSettings: '"SOFT" 100, "opsz" 72' }}>
-        {site.name}
-      </span>
+      {/* The negative right margin cancels the tracking after the last letter so the lockup stays optically centred. */}
+      <span className="mr-[-0.26em] font-display text-[1.32rem] uppercase leading-none tracking-[0.26em]">{site.name}</span>
     </span>
   );
 }

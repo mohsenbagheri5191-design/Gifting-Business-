@@ -10,7 +10,7 @@ import { packaging, rules } from "@/lib/config";
 
 export const metadata: Metadata = {
   title: "How it works",
-  description: "How Keepsake experience gifts work — for the giver, the lucky recipient, and anyone booking for themselves.",
+  description: "How Cadeau experience gifts work — for the giver, the lucky recipient, and anyone booking for themselves.",
 };
 
 type Step = { title: string; text: string; image: string };
@@ -42,7 +42,7 @@ export default function HowItWorksPage() {
           <p className="eyebrow">How it works</p>
           <h1 className="mt-4 text-[2.8rem] leading-[1.03] sm:text-7xl">Simple for you. Special for them.</h1>
           <p className="mt-5 max-w-xl text-lg text-ink-soft">
-            Keepsake turns a tasting menu, a sunrise balloon flight or a morning at the pottery wheel into a beautiful gift — and lets them choose the one that feels right.
+            Cadeau turns a tasting menu, a sunrise balloon flight or a morning at the pottery wheel into a beautiful gift — and lets them choose the one that feels right.
           </p>
         </div>
         <div className="hidden lg:col-span-5 lg:block">

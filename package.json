@@ -1,21 +1,22 @@
 {
-  "name": "keepsake",
+  "name": "cadeau",
   "version": "0.1.0",
   "private": true,
-  "description": "Keepsake — experience gifts. Choose up to five experiences, pay only for the most expensive, and the recipient chooses with a 14-character code.",
+  "description": "Cadeau — experience gifts. Choose up to five experiences, pay only for the most expensive, and the recipient chooses with a 14-character code.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "db:generate": "drizzle-kit generate",
+    "db:generate": "drizzle-kit generate && node scripts/sync-netlify-migrations.mjs",
     "e2e": "node scripts/e2e.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "0.6.0",
-    "@fontsource-variable/fraunces": "5.3.0",
-    "@fontsource-variable/manrope": "5.3.0",
+    "@fontsource-variable/figtree": "5.3.0",
+    "@fontsource/tenor-sans": "5.3.0",
+    "@netlify/database": "2.0.4",
     "drizzle-orm": "0.45.4",
     "lucide-react": "1.81.0",
     "next": "16.4.6",

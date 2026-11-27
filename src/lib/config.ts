@@ -1,5 +1,5 @@
 /**
- * Central business configuration for Keepsake.
+ * Central business configuration for Cadeau.
  * Everything a non-developer is likely to change lives here (or in .env).
  * Values read by the browser must use NEXT_PUBLIC_* env vars.
  */
@@ -15,18 +15,18 @@ function detectSiteUrl(): string {
 }
 
 export const site = {
-  name: "Keepsake",
-  tagline: "Experiences worth keeping",
+  name: "Cadeau",
+  tagline: "Experiences, beautifully given",
   description:
     "Experience gifts in Toronto. Choose up to five experiences, pay only for the most expensive, and let them choose the one they love.",
   url: detectSiteUrl().replace(/\/$/, ""),
   // TODO before launch: replace with your real contact details.
-  supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? "hello@keepsake.example",
+  supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? "hello@cadeau.example",
   supportPhone: process.env.NEXT_PUBLIC_SUPPORT_PHONE ?? "(416) 555-0199",
   supportHours: "Every day, 9 am – 8 pm ET",
-  corporateEmail: process.env.NEXT_PUBLIC_CORPORATE_EMAIL ?? "corporate@keepsake.example",
+  corporateEmail: process.env.NEXT_PUBLIC_CORPORATE_EMAIL ?? "corporate@cadeau.example",
   studio: {
-    name: "Keepsake Studio",
+    name: "Cadeau Studio",
     address: "Ossington Avenue, Toronto, ON",
     hours: "Tuesday – Sunday, 11 am – 7 pm",
   },
@@ -75,7 +75,7 @@ export const packaging: Record<PackagingId, { id: PackagingId; name: string; sho
   },
   box: {
     id: "box",
-    name: "Keepsake gift box",
+    name: "Cadeau gift box",
     short: "Delivery or pickup",
     priceCents: 1500,
     description:

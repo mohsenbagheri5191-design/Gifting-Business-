@@ -5,7 +5,7 @@ import { formatDate } from "@/lib/format";
 import { Stars } from "@/components/Stars";
 import { PageHero } from "@/components/sections";
 
-export const metadata: Metadata = { title: "Reviews", description: "What people say after giving — and receiving — a Keepsake." };
+export const metadata: Metadata = { title: "Reviews", description: "What people say after giving — and receiving — a Cadeau." };
 
 export default async function ReviewsPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
   const page = Math.max(1, Number((await searchParams).page) || 1);
@@ -15,7 +15,7 @@ export default async function ReviewsPage({ searchParams }: { searchParams: Prom
 
   return (
     <>
-      <PageHero eyebrow="Reviews" title={`${stats.average.toFixed(1)} out of 5`} description={`From ${stats.count} reviews of Keepsake experiences.`}>
+      <PageHero eyebrow="Reviews" title={`${stats.average.toFixed(1)} out of 5`} description={`From ${stats.count} reviews of Cadeau experiences.`}>
         <Stars value={stats.average} size={26} className="mt-6" />
       </PageHero>
       <section className="container-page columns-1 gap-5 md:columns-2 lg:columns-3">

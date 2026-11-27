@@ -1,8 +1,21 @@
 @import "tailwindcss";
 
+/* Tenor Sans draws its figures with calligraphic, serif-like strokes. The display face borrows
+   Figtree's plain figures instead (same font file as the text face, so nothing extra loads). */
+@font-face {
+  font-family: "Cadeau Figures";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 900;
+  src: url("../../node_modules/@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0024-0025, U+002B, U+0030-0039;
+}
+
 /* ------------------------------------------------------------------
-   Keepsake design tokens — calm, organic, high-end.
+   Cadeau design tokens — calm, organic, high-end.
    Linen & paper neutrals, moss & sage greens, a quiet terracotta accent.
+   Type: Tenor Sans (display — clean, classical proportions) with
+   Figtree (text — simple, open and very legible).
    ------------------------------------------------------------------ */
 @theme {
   --color-linen: #f4efe6;
@@ -23,8 +36,8 @@
   --color-forest: #1e2620;
   --color-gold: #b8935a;
 
-  --font-display: "Fraunces Variable", "Iowan Old Style", Georgia, serif;
-  --font-sans: "Manrope Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Cadeau Figures", "Tenor Sans", "Gill Sans", "Gill Sans MT", "Trebuchet MS", ui-sans-serif, sans-serif;
+  --font-sans: "Figtree Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
   --radius-card: 1.75rem;
@@ -75,10 +88,11 @@
   }
   h1, h2, h3, h4, .font-display {
     font-family: var(--font-display);
-    font-variation-settings: "SOFT" 100, "WONK" 0;
-    font-weight: 380;
-    letter-spacing: -0.015em;
-    line-height: 1.08;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.12;
+    /* Tenor Sans has a single upright weight: never fake bold or italic. */
+    font-synthesis: none;
   }
   ::selection {
     background: var(--color-clay-mist);

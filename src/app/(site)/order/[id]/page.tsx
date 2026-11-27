@@ -33,7 +33,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
         order = (await getOrder(id))!;
       }
     } catch (err) {
-      console.error("[keepsake] stripe session check failed", err);
+      console.error("[cadeau] stripe session check failed", err);
     }
   }
 

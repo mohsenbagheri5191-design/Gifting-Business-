@@ -4,7 +4,7 @@ import { FaqList, PageHero } from "@/components/sections";
 import { faqSections } from "@/lib/faq";
 import { site } from "@/lib/config";
 
-export const metadata: Metadata = { title: "Help & FAQ", description: "Answers about ordering, payment, delivery, using a Keepsake gift and refunds." };
+export const metadata: Metadata = { title: "Help & FAQ", description: "Answers about ordering, payment, delivery, using a Cadeau gift and refunds." };
 
 export default function FaqPage() {
   return (

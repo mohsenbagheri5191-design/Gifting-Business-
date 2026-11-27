@@ -46,9 +46,9 @@ export function formatCode(code: string): string {
   return c.length === CODE_LENGTH ? `${c.slice(0, 7)}-${c.slice(7)}` : c;
 }
 
-/** Order numbers shown to customers, e.g. "KS-4Q7M2X". */
+/** Order numbers shown to customers, e.g. "CD-4Q7M2X". */
 export function generateOrderNumber(): string {
-  return `KS-${randomChars(6)}`;
+  return `CD-${randomChars(6)}`;
 }
 
 /** Booking references, e.g. "BK-7HX2QM4D". */

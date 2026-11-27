@@ -1,7 +1,7 @@
 import { delivery, packaging, type DeliveryId, type PackagingId } from "./config";
 
 /**
- * The core Keepsake rule (same as bodo): a gift can hold several experiences,
+ * The core Cadeau rule (same as bodo): a gift can hold several experiences,
  * and the giver pays only for the most expensive one. That price becomes the
  * certificate's value.
  */

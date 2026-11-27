@@ -19,22 +19,22 @@ export async function maybeTick() {
   try {
     await tick();
   } catch (err) {
-    console.error("[keepsake] background tick failed", err);
+    console.error("[cadeau] background tick failed", err);
   }
 }
 
-const g = globalThis as unknown as { __keepsakeScheduler?: NodeJS.Timeout };
+const g = globalThis as unknown as { __cadeauScheduler?: NodeJS.Timeout };
 
 /**
  * Long-running servers (`next start`, Docker, Render, Railway…) run the tick every minute.
  * Serverless hosts (e.g. Vercel) should call GET /api/cron/tick on a schedule instead.
  */
 export function startScheduler() {
-  if (g.__keepsakeScheduler || process.env.DISABLE_SCHEDULER === "true") return;
-  g.__keepsakeScheduler = setInterval(() => {
-    tick().catch((err) => console.error("[keepsake] scheduler tick failed", err));
+  if (g.__cadeauScheduler || process.env.DISABLE_SCHEDULER === "true") return;
+  g.__cadeauScheduler = setInterval(() => {
+    tick().catch((err) => console.error("[cadeau] scheduler tick failed", err));
   }, 60_000);
-  g.__keepsakeScheduler.unref?.();
+  g.__cadeauScheduler.unref?.();
   // first run shortly after boot
-  setTimeout(() => tick().catch((err) => console.error("[keepsake] scheduler tick failed", err)), 5_000).unref?.();
+  setTimeout(() => tick().catch((err) => console.error("[cadeau] scheduler tick failed", err)), 5_000).unref?.();
 }

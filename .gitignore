@@ -10,6 +10,9 @@ next-env.d.ts
 # local database (embedded Postgres) and uploads
 .data/
 
+# Netlify CLI link state
+.netlify/
+
 # env files (keep the example)
 .env
 .env.*

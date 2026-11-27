@@ -1,12 +1,12 @@
-# Reference review: bodo.ua → Keepsake
+# Reference review: bodo.ua → Cadeau
 
 Before building, the full bodo.ua site was reviewed (November 2026): the homepage, the gift-catalog mega-menu, catalog and category pages, product pages, the multi-step gift checkout, the certificate activation flow, *How it works*, delivery & payment, corporate gifts, the help centre, contacts, about, team, reviews and legal pages, on desktop and mobile.
 
-Keepsake reproduces bodo's **structure, features and business mechanics** with **original branding, copy, photography and a new visual identity** (calm and organic rather than bodo's bright red/green). No bodo text, logos or images are used.
+Cadeau reproduces bodo's **structure, features and business mechanics** with **original branding, copy, photography and a new visual identity** (calm and organic rather than bodo's bright red/green). No bodo text, logos or images are used.
 
 ## The business model (identical)
 
-| bodo.ua | Keepsake |
+| bodo.ua | Cadeau |
 |---|---|
 | Put **1–5 experiences** into one gift | Same — `rules.maxGiftItems = 5` |
 | **Pay for the most expensive** experience in the set | Same — `certificateValueCents()` in `src/lib/pricing.ts` |
@@ -21,7 +21,7 @@ Keepsake reproduces bodo's **structure, features and business mechanics** with *
 
 ## Site structure
 
-| bodo.ua | Keepsake route |
+| bodo.ua | Cadeau route |
 |---|---|
 | Top bar: experiences/travel, city, language | Announcement bar (5-for-1, never expires, redeem) |
 | Mega-menu: by recipient (her/him/couple/kids/family/company), by occasion (birthday, anniversaries, holidays…), categories, by age | **Gift ideas** mega-menu: who it's for (grouped), occasions, categories, by budget |

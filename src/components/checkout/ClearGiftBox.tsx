@@ -12,7 +12,7 @@ export function ClearGiftBox() {
     done.current = true;
     clear();
     try {
-      sessionStorage.removeItem("keepsake.checkout.v1");
+      sessionStorage.removeItem("cadeau.checkout.v1");
     } catch {}
   }, [hydrated, clear]);
   return null;

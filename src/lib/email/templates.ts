@@ -2,7 +2,8 @@ import { rules, site } from "../config";
 import { formatCode } from "../codes";
 import { formatDate, formatMoney } from "../format";
 
-/* Email-safe design: tables, inline styles, web-safe serif fallback. */
+/* Email-safe design: tables, inline styles. Email clients rarely load web fonts,
+   so the display face falls back to the closest humanist sans on each device. */
 const C = {
   bg: "#F4EFE6",
   card: "#FBF8F2",
@@ -14,8 +15,8 @@ const C = {
   clay: "#96593A",
   sand: "#EDE5D7",
 };
-const serif = "Georgia, 'Times New Roman', serif";
-const sans = "'Helvetica Neue', Helvetica, Arial, sans-serif";
+const display = "'Tenor Sans', 'Gill Sans', 'Gill Sans MT', Optima, 'Trebuchet MS', Helvetica, Arial, sans-serif";
+const sans = "Figtree, 'Helvetica Neue', Helvetica, Arial, sans-serif";
 
 export type EmailContent = { subject: string; html: string; text: string };
 
@@ -30,7 +31,7 @@ function layout(preheader: string, body: string) {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.bg};padding:32px 12px;">
 <tr><td align="center">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;">
-    <tr><td style="padding:0 8px 20px;font-family:${serif};font-size:26px;color:${C.moss};letter-spacing:-0.5px;">${esc(site.name)}</td></tr>
+    <tr><td style="padding:0 8px 20px;font-family:${display};font-size:19px;color:${C.moss};letter-spacing:6px;text-transform:uppercase;">${esc(site.name)}</td></tr>
     <tr><td style="background:${C.card};border:1px solid ${C.line};border-radius:20px;padding:36px 32px;font-family:${sans};color:${C.ink};font-size:15px;line-height:1.6;">
       ${body}
     </td></tr>
@@ -42,7 +43,7 @@ function layout(preheader: string, body: string) {
 </td></tr></table></body></html>`;
 }
 
-const h1 = (t: string) => `<h1 style="margin:0 0 12px;font-family:${serif};font-weight:normal;font-size:30px;line-height:1.2;color:${C.ink};">${t}</h1>`;
+const h1 = (t: string) => `<h1 style="margin:0 0 12px;font-family:${display};font-weight:normal;font-size:30px;line-height:1.2;color:${C.ink};">${t}</h1>`;
 const p = (t: string) => `<p style="margin:0 0 14px;">${t}</p>`;
 const button = (href: string, label: string) =>
   `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:22px 0;"><tr><td style="background:${C.moss};border-radius:999px;">
@@ -77,18 +78,18 @@ export function certificateEmail(args: {
   const certUrl = `${site.url}/certificate/${args.code}`;
   const choice = args.items.length > 1 ? `a choice of ${args.items.length} experiences` : "an experience";
   const subject = args.toBuyer
-    ? `Your Keepsake gift for ${args.recipientName} is ready`
-    : `${args.fromName} sent you a Keepsake`;
+    ? `Your Cadeau gift for ${args.recipientName} is ready`
+    : `${args.fromName} sent you a Cadeau`;
   const intro = args.toBuyer
-    ? p(`Here is the Keepsake for <strong>${esc(args.recipientName)}</strong>. Print it, forward this email, or share the link below — it's all they need.`)
+    ? p(`Here is the Cadeau for <strong>${esc(args.recipientName)}</strong>. Print it, forward this email, or share the link below — it's all they need.`)
     : p(`<strong>${esc(args.fromName)}</strong> has given you ${choice}. Choose the one you love, pick a date, and we'll take care of the rest.`);
   const message = args.message
-    ? `<div style="margin:18px 0;padding:18px 20px;border-left:3px solid ${C.clay};background:${C.bg};font-family:${serif};font-style:italic;font-size:17px;color:${C.soft};">“${esc(args.message)}”<div style="font-style:normal;font-family:${sans};font-size:13px;margin-top:8px;color:${C.muted};">— ${esc(args.fromName)}</div></div>`
+    ? `<div style="margin:18px 0;padding:18px 20px;border-left:3px solid ${C.clay};background:${C.bg};font-family:${display};font-size:17px;line-height:1.5;color:${C.soft};">“${esc(args.message)}”<div style="font-family:${sans};font-size:13px;margin-top:8px;color:${C.muted};">— ${esc(args.fromName)}</div></div>`
     : "";
   const items = list(
     args.items.map(
       (i) =>
-        `<div style="font-family:${serif};font-size:17px;">${esc(i.title)}</div><div style="font-size:13px;color:${C.muted};">${esc(i.optionLabel)} · ${esc(i.duration)}</div>`,
+        `<div style="font-family:${display};font-size:17px;">${esc(i.title)}</div><div style="font-size:13px;color:${C.muted};">${esc(i.optionLabel)} · ${esc(i.duration)}</div>`,
     ),
   );
   const html = layout(
@@ -103,7 +104,7 @@ export function certificateEmail(args: {
      ${p(`<a href="${certUrl}" style="color:${C.moss};">View or print the certificate</a>`)}`,
   );
   const text = [
-    args.toBuyer ? `Your Keepsake gift for ${args.recipientName} is ready.` : `${args.fromName} sent you a Keepsake.`,
+    args.toBuyer ? `Your Cadeau gift for ${args.recipientName} is ready.` : `${args.fromName} sent you a Cadeau.`,
     args.message ? `\n“${args.message}” — ${args.fromName}\n` : "",
     `${args.items.length > 1 ? "Choose one of:" : "Your experience:"}`,
     ...args.items.map((i) => `- ${i.title} (${i.optionLabel}, ${i.duration})`),
@@ -131,7 +132,7 @@ export function orderReceiptEmail(args: {
   const url = `${site.url}/order/${args.orderId}`;
   const rows = args.items.map(
     (i) =>
-      `<table role="presentation" width="100%"><tr><td><div style="font-family:${serif};font-size:16px;">${esc(i.title)}</div><div style="font-size:13px;color:${C.muted};">${esc(i.optionLabel)}</div></td><td align="right" style="white-space:nowrap;color:${C.soft};">${formatMoney(i.priceCents)}</td></tr></table>`,
+      `<table role="presentation" width="100%"><tr><td><div style="font-family:${display};font-size:16px;">${esc(i.title)}</div><div style="font-size:13px;color:${C.muted};">${esc(i.optionLabel)}</div></td><td align="right" style="white-space:nowrap;color:${C.soft};">${formatMoney(i.priceCents)}</td></tr></table>`,
   );
   const totals = `<table role="presentation" width="100%" style="font-size:14px;color:${C.soft};">
     <tr><td>${args.mode === "gift" ? "Gift value (the most expensive experience)" : "Experience"}</td><td align="right">${formatMoney(args.certificateValueCents)}</td></tr>

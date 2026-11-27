@@ -55,7 +55,7 @@ export default async function RedeemCodePage({ params }: { params: Promise<{ cod
             </h1>
             {!isSelf && cert.fromName && <p className="mt-3 text-lg text-ink-soft">A gift from {cert.fromName}.</p>}
             {cert.message && (
-              <blockquote className="mt-6 max-w-xl border-l-2 border-clay pl-5 font-display text-2xl italic leading-snug text-ink-soft">“{cert.message}”</blockquote>
+              <blockquote className="mt-6 max-w-xl border-l-2 border-clay pl-5 font-display text-2xl leading-snug text-ink-soft">“{cert.message}”</blockquote>
             )}
           </div>
           <div className="lg:col-span-5">
@@ -158,7 +158,7 @@ export default async function RedeemCodePage({ params }: { params: Promise<{ cod
           <div className="flex flex-col items-start gap-5 rounded-[2rem] bg-forest p-9 text-linen sm:flex-row sm:items-center sm:justify-between sm:p-12">
             <div>
               <h2 className="text-3xl text-linen sm:text-4xl">Fancy something different?</h2>
-              <p className="mt-2 max-w-xl text-linen/75">Swap for any experience on Keepsake. Up to {formatMoney(cert.balanceCents)} is covered; for anything more, you simply pay the difference.</p>
+              <p className="mt-2 max-w-xl text-linen/75">Swap for any experience on Cadeau. Up to {formatMoney(cert.balanceCents)} is covered; for anything more, you simply pay the difference.</p>
             </div>
             <Link href={`/experiences?redeem=${cert.code}`} className="btn btn-light shrink-0">
               Browse all experiences <ArrowRight className="h-4 w-4" />

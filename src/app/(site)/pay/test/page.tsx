@@ -23,7 +23,7 @@ export default async function TestPayPage({ searchParams }: { searchParams: Prom
     const order = await getOrder(ref);
     if (!order) notFound();
     amount = order.totalCents;
-    title = order.mode === "gift" ? `Keepsake gift for ${order.recipientName} · order ${order.number}` : `${order.items[0]?.title} · order ${order.number}`;
+    title = order.mode === "gift" ? `Cadeau gift for ${order.recipientName} · order ${order.number}` : `${order.items[0]?.title} · order ${order.number}`;
     back = order.mode === "gift" ? "/checkout?cancelled=1" : `/order/${order.id}`;
     already = order.status === "paid";
   } else {

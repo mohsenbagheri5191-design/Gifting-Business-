@@ -13,7 +13,7 @@ import { mkdirSync } from "node:fs";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 const OUT = process.env.OUT_DIR ?? "e2e-screenshots";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "keepsake-admin";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "cadeau-admin";
 mkdirSync(OUT, { recursive: true });
 
 const inDays = (n) => new Date(Date.now() + n * 86400_000).toISOString().slice(0, 10);
@@ -174,7 +174,7 @@ try {
 
   await admin.goto(`${BASE}/admin/emails`);
   await shot(admin, "admin-emails");
-  await admin.locator("a", { hasText: "sent you a Keepsake" }).first().click();
+  await admin.locator("a", { hasText: "sent you a Cadeau" }).first().click();
   await admin.waitForURL("**/admin/emails/**");
   await shot(admin, "email-certificate-preview");
 

@@ -1,7 +1,7 @@
 import { boxColors, type BoxColorId } from "@/lib/config";
 import { cn } from "@/lib/ui";
 
-/** Isometric illustration of the Keepsake gift box in any of the colourways. */
+/** Isometric illustration of the Cadeau gift box in any of the colourways. */
 export function GiftBoxArt({ color = "sage", className }: { color?: BoxColorId | string; className?: string }) {
   const c = boxColors.find((b) => b.id === color) ?? boxColors[0];
   const shade = (o: number) => `rgba(20,24,18,${o})`;

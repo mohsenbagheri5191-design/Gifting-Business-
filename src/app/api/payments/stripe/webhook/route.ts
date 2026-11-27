@@ -31,7 +31,7 @@ export async function POST(req: Request) {
         if (purpose === "order" && referenceId) await markOrderPaid(referenceId, { provider: "stripe", ref: session.id });
         if (purpose === "topup" && referenceId) await markTopUpPaid(Number(referenceId), { provider: "stripe", ref: session.id });
       } catch (err) {
-        console.error("[keepsake] webhook fulfilment failed", err);
+        console.error("[cadeau] webhook fulfilment failed", err);
         return NextResponse.json({ error: "Fulfilment failed" }, { status: 500 });
       }
     }

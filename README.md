@@ -1,8 +1,8 @@
-# Keepsake — experience gifts, Toronto
+# Cadeau — experience gifts, Toronto
 
 A complete experience-gifting website and back office, modelled on the business mechanics of [bodo.ua](https://www.bodo.ua/ua/) with an original, calm and organic design.
 
-> **Dexter wants to give his brother Yashar a memorable experience.** He puts a lakeside dinner, a comedy night and a pottery workshop into one gift, and **pays only for the most expensive** ($240). Keepsake issues a **random 14-character code** linked to those three experiences, wraps it as an e-certificate (or a gift box), and delivers it. Yashar enters the code on the website, sees his gift, **chooses the one he wants** (or swaps for anything else up to $240), picks his dates, and the team confirms the booking. Anything he doesn't spend stays on the same code for later; anything pricier, he tops up.
+> **Dexter wants to give his brother Yashar a memorable experience.** He puts a lakeside dinner, a comedy night and a pottery workshop into one gift, and **pays only for the most expensive** ($240). Cadeau issues a **random 14-character code** linked to those three experiences, wraps it as an e-certificate (or a gift box), and delivers it. Yashar enters the code on the website, sees his gift, **chooses the one he wants** (or swaps for anything else up to $240), picks his dates, and the team confirms the booking. Anything he doesn't spend stays on the same code for later; anything pricier, he tops up.
 
 ![Home](docs/screenshots/01-home.jpg)
 
@@ -26,7 +26,7 @@ npm run dev          # http://localhost:3000
 
 That's it — no database to install. On first start the app creates an embedded Postgres database in `./.data/` and fills it with a **sample Toronto catalog** (39 experiences across 16 categories).
 
-- Admin: http://localhost:3000/admin — development password `keepsake-admin`
+- Admin: http://localhost:3000/admin — development password `cadeau-admin`
 - Payments run in **test mode** until you add Stripe keys (a simulated card page, nothing is charged).
 - Emails are not sent until you configure SMTP; you can read every one of them in **Admin → Emails**.
 
@@ -65,28 +65,30 @@ npm run build && npm start   # production build
 | Validity | `NEXT_PUBLIC_CERTIFICATE_VALID_MONTHS` (default 0 = never expires) |
 | Packaging and delivery fees, box colours, greeting ideas | `src/lib/config.ts` |
 
-## Put it online (about 10 minutes, free to start)
+## Put it online — Netlify
 
-The website needs a host to be visible on the internet. The quickest path for this stack is **Vercel** (hosting) with **Neon** (database), both with free plans:
+The project is set up for **Netlify** with **Netlify Database** (managed Postgres):
 
-1. Go to **vercel.com** → *Sign Up* → **Continue with GitHub** (the GitHub account that owns this repository).
-2. *Add New… → Project*, find **Gifting-Business-** and click **Import**. (Not listed? Click *Adjust GitHub App Permissions* and give Vercel access to the repository.)
-3. Open **Environment Variables** and add:
-   | Name | Value |
-   |---|---|
-   | `ADMIN_PASSWORD` | a password you choose, for `/admin` |
-   | `SESSION_SECRET` | any long random text |
-   | `ALLOW_TEST_PAYMENTS` | `true` — simulated payments until Stripe is connected |
-4. Click **Deploy**.
-5. In the new project open the **Storage** tab → **Create Database** → **Neon** (Serverless Postgres) → free plan, region closest to Toronto (e.g. US East) → **Connect** it to the project. This adds `DATABASE_URL` for you. *(Until this step the site runs on a temporary database that is wiped regularly.)*
-6. **Deployments** → ⋯ on the latest one → **Redeploy**. Then click **Visit** — your site lives at an address like `gifting-business-xxxx.vercel.app`, and the admin at `/admin`.
+- `netlify.toml` builds the Next.js app (Netlify adds its Next.js runtime automatically).
+- The `@netlify/database` dependency provisions the database, and Netlify applies the SQL in `netlify/database/migrations` before each deploy goes live. On the first visit the app fills the empty catalog with the sample experiences.
+- Settings live in Netlify → *Project configuration* → *Environment variables*:
 
-The database tables and the sample catalog are created automatically on the first visit. Good to know:
+  | Name | Value |
+  |---|---|
+  | `ADMIN_PASSWORD` | the password for `/admin` |
+  | `SESSION_SECRET` | any long random text |
+  | `ALLOW_TEST_PAYMENTS` | `true` — simulated payments until Stripe is connected |
+  | `NEXT_PUBLIC_SITE_URL` | optional — your own domain once you connect one (otherwise the Netlify address is used) |
 
-- Vercel's free *Hobby* plan is for non-commercial use: perfect for previewing and testing. When you start selling, upgrade to *Pro* or use a host whose free tier allows commercial use (e.g. Netlify).
-- When you add your own domain, set `NEXT_PUBLIC_SITE_URL` to it (otherwise the Vercel address is detected automatically).
-- Scheduled e-certificates go out on the first visit after their time. For minute-exact delivery, set `CRON_SECRET` and have a free scheduler (e.g. cron-job.org) call `https://YOUR-SITE/api/cron/tick` every minute with the header `Authorization: Bearer YOUR_CRON_SECRET`.
-- **Other hosts:** anything that runs `npm run build && npm start` with a `DATABASE_URL` (Netlify, Render, Railway, Fly.io, a VPS). On long-running servers you can even skip `DATABASE_URL` if you mount a persistent disk at `./.data`.
+  Netlify reads variables when it builds, so after changing one, run a new deploy (*Deploys* → *Trigger deploy*).
+
+Good to know:
+
+- To deploy automatically on every push, link the GitHub repository in Netlify (*Project configuration* → *Build & deploy* → *Link repository*).
+- Netlify Database is included in Netlify's credit-based plans (the free plan too) and sleeps when idle, so the first page after a quiet spell takes a moment longer.
+- Scheduled e-certificates go out on the first visit after their time. For minute-exact delivery, set `CRON_SECRET` and have a scheduler (e.g. cron-job.org) call `https://YOUR-SITE/api/cron/tick` every minute with the header `Authorization: Bearer YOUR_CRON_SECRET` — this keeps the database awake, which uses more credits.
+- **Other hosts:** anything that runs `npm run build && npm start` with a `DATABASE_URL` (Vercel + Neon, Render, Railway, Fly.io, a VPS). Outside Netlify the app creates its tables itself on first start, from `./drizzle`; on long-running servers you can even skip `DATABASE_URL` if you mount a persistent disk at `./.data`.
+- Schema changes: edit `src/lib/db/schema.ts`, then `npm run db:generate` — it writes the migration to `./drizzle` and mirrors it into `netlify/database/migrations`. Never edit a migration that has been deployed; add a new one.
 
 ## Going live — checklist
 
@@ -96,9 +98,9 @@ The admin dashboard shows this checklist with live status.
 2. **Your real catalog** — in Admin → Experiences, edit or hide the sample experiences and add your partners' offers and photos. Then **remove the sample reviews** (Admin → Reviews) and set `SEED_SAMPLE_DATA=false`. The sample venues, reviews and photos are placeholders: launching with them would mislead customers.
 3. **Stripe** — create a Stripe account (Canada, CAD), set `STRIPE_SECRET_KEY`, add the webhook `https://YOUR-DOMAIN/api/payments/stripe/webhook` for `checkout.session.completed`, and set `STRIPE_WEBHOOK_SECRET`. Do one real test purchase with a `sk_test_` key first.
 4. **Email** — any SMTP provider (Postmark, Resend, SendGrid, Mailgun…): set `SMTP_URL`, `MAIL_FROM` and optionally `ADMIN_NOTIFY_EMAIL`, and verify your sending domain (SPF/DKIM).
-5. **Database** — set `DATABASE_URL` to a managed Postgres (Neon, Supabase, Render, Railway…). Tables are created automatically on first start, safely even when several servers start at once.
+5. **Database** — on Netlify, Netlify Database is set up automatically. Elsewhere set `DATABASE_URL` to a managed Postgres (Neon, Supabase, Render, Railway…); tables are created on first start, safely even when several servers start at once.
 6. **Admin** — set `ADMIN_PASSWORD` and `SESSION_SECRET`.
-7. **Hosting** — see *Put it online* above. Remove `ALLOW_TEST_PAYMENTS` once Stripe is live.
+7. **Hosting** — see *Put it online* above. Remove `ALLOW_TEST_PAYMENTS` once Stripe is live, then redeploy.
 8. **Legal & tax** — the legal pages are templates. Have a Canadian lawyer review them, especially Ontario's gift-card rules (no expiry dates or dormancy fees on most gift cards) and refund terms, and ask an accountant how HST applies to gift certificates, packaging and delivery fees in your setup.
 
 ## Project structure
@@ -118,13 +120,15 @@ src/
     payments.ts        Stripe Checkout + test mode
     email/             templates and sending
     db/                schema, connection, sample catalog
-drizzle/               SQL migrations (applied automatically)
+drizzle/               SQL migrations (the app applies them itself outside Netlify)
+netlify/database/      the same migrations, applied by Netlify Database on every deploy
+netlify.toml           Netlify build settings
 tests/                 business-rule tests
 scripts/e2e.mjs        browser walkthrough of the full story
 docs/                  screenshots and the bodo.ua review
 ```
 
-Tech: Next.js 16 (App Router, TypeScript), Tailwind CSS 4, Drizzle ORM on Postgres (PGlite locally), Stripe, Nodemailer. Fonts: Fraunces and Manrope (self-hosted). Photos: Unsplash (free licence), as placeholders.
+Tech: Next.js 16 (App Router, TypeScript), Tailwind CSS 4, Drizzle ORM on Postgres (PGlite locally), Stripe, Nodemailer. Fonts: Tenor Sans (headings, wordmark) and Figtree (text), self-hosted. Photos: Unsplash (free licence), as placeholders.
 
 ## Known limits / next steps
 

@@ -15,7 +15,7 @@ const columns: { title: string; links: [string, string][] }[] = [
     ],
   },
   {
-    title: "Keepsake",
+    title: "Cadeau",
     links: [
       ["/about", "Our story"],
       ["/how-it-works", "How it works"],

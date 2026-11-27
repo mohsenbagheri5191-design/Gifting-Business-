@@ -39,7 +39,7 @@ export default async function BookingPage({ params, searchParams }: Props) {
         if (result.ok) r = result.certificate.redemptions.find((x) => x.reference === reference) ?? r;
       }
     } catch (err) {
-      console.error("[keepsake] stripe top-up check failed", err);
+      console.error("[cadeau] stripe top-up check failed", err);
     }
   }
   const cert = result.ok ? result.certificate : null;
@@ -69,7 +69,7 @@ export default async function BookingPage({ params, searchParams }: Props) {
               `${r.title} costs ${formatMoney(r.priceCents)}. Your gift covers ${formatMoney(r.fromBalanceCents)} — pay the remaining ${formatMoney(r.topUpCents)} to send your request. We'll hold your balance for ${rules.topUpHoldMinutes} minutes.`}
             {r.status === "requested" && "We're checking availability with the venue and will confirm by email within a few hours (or the next morning for late requests)."}
             {r.status === "confirmed" && `Everything is set. Your confirmation has been emailed to ${r.guestEmail}.`}
-            {r.status === "completed" && "Thank you for choosing Keepsake. We'd love to hear how it went."}
+            {r.status === "completed" && "Thank you for choosing Cadeau. We'd love to hear how it went."}
             {r.status === "declined" && `Your preferred times weren't available. ${formatMoney(r.fromBalanceCents)} is back on your gift — choose new dates or something new.`}
             {r.status === "cancelled" && "No problem — any amount taken from your gift has been returned to its balance."}
           </p>

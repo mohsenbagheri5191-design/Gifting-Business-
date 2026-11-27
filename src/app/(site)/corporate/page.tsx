@@ -58,7 +58,7 @@ export default async function CorporatePage() {
       </section>
 
       <section className="container-page mt-24">
-        <SectionHeading eyebrow="When teams use Keepsake" title="For every reason to say thank you" />
+        <SectionHeading eyebrow="When teams use Cadeau" title="For every reason to say thank you" />
         <ul className="grid grid-cols-2 gap-3 md:grid-cols-3">
           {uses.map(([Icon, label]) => (
             <li key={label} className="flex items-center gap-4 rounded-[1.5rem] border border-line bg-paper p-5">

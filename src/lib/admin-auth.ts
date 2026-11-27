@@ -5,16 +5,16 @@ import { redirect } from "next/navigation";
 /**
  * Minimal, dependency-free admin login:
  * one shared password (ADMIN_PASSWORD) and an HMAC-signed, http-only session cookie.
- * In development the password defaults to "keepsake-admin"; in production the
+ * In development the password defaults to "cadeau-admin"; in production the
  * admin is disabled until ADMIN_PASSWORD is set.
  */
 
-const COOKIE = "ks_admin";
+const COOKIE = "cd_admin";
 const SESSION_HOURS = 12;
 
 export function adminPassword(): string | null {
   if (process.env.ADMIN_PASSWORD) return process.env.ADMIN_PASSWORD;
-  return process.env.NODE_ENV === "production" ? null : "keepsake-admin";
+  return process.env.NODE_ENV === "production" ? null : "cadeau-admin";
 }
 
 function secret() {

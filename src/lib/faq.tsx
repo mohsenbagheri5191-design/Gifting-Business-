@@ -7,7 +7,7 @@ import { formatMoney } from "./format";
 const validity = () =>
   rules.certificateValidMonths > 0
     ? `Every gift is valid for ${rules.certificateValidMonths} months from the date of purchase.`
-    : "Keepsake gifts never expire. Take all the time you need.";
+    : "Cadeau gifts never expire. Take all the time you need.";
 
 export const faqSections: { id: string; title: string; items: { q: string; a: React.ReactNode }[] }[] = [
   {
@@ -15,7 +15,7 @@ export const faqSections: { id: string; title: string; items: { q: string; a: Re
     title: "Ordering",
     items: [
       {
-        q: "How does a Keepsake gift work?",
+        q: "How does a Cadeau gift work?",
         a: (
           <p>
             Add up to {rules.maxGiftItems} experiences to one gift. You pay only for the most expensive one — that becomes the gift&apos;s value. The person you&apos;re celebrating receives a unique 14-character code,
@@ -104,7 +104,7 @@ export const faqSections: { id: string; title: string; items: { q: string; a: Re
         ),
       },
       { q: "How far ahead should I book?", a: <p>As early as you can — popular experiences and weekends fill up weeks ahead, especially in summer and December.</p> },
-      { q: "Do I have to book through Keepsake?", a: <p>Yes. Venues only accept Keepsake bookings that come through us, so please don&apos;t turn up without a confirmation.</p> },
+      { q: "Do I have to book through Cadeau?", a: <p>Yes. Venues only accept Cadeau bookings that come through us, so please don&apos;t turn up without a confirmation.</p> },
       { q: "Can I choose something more expensive?", a: <p>Of course — choose it while redeeming and pay only the difference online.</p> },
       { q: "What happens to the rest if I choose something cheaper?", a: <p>The remaining balance stays on the same code. Use it for another experience whenever you like.</p> },
       { q: "Can I change or cancel my booking?", a: <p>Yes, with at least 48 hours&apos; notice (some venues need more — it&apos;s stated in your confirmation). Later changes may not be possible.</p> },

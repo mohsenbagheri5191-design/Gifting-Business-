@@ -8,7 +8,7 @@ export async function json<T>(fn: () => Promise<T>, status = 200) {
     return NextResponse.json(await fn(), { status });
   } catch (err) {
     if (err instanceof UserError) return NextResponse.json({ error: err.message }, { status: err.status });
-    console.error("[keepsake] api error", err);
+    console.error("[cadeau] api error", err);
     return NextResponse.json({ error: "Something went wrong on our side. Please try again in a moment." }, { status: 500 });
   }
 }
