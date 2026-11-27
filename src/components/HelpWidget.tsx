@@ -1,15 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MessageCircle, X } from "lucide-react";
 import { site } from "@/lib/config";
+import { cn } from "@/lib/ui";
+
+/** Netlify's free-plan "Powered by Netlify" badge: a fixed, 64px-high frame in the bottom-right corner. */
+const HOST_BADGE_ID = "nl-badge-frame";
 
 /** Floating "Questions?" button (bodo's chat bubble), quiet and out of the way. */
 export function HelpWidget() {
   const [open, setOpen] = useState(false);
+  const [lifted, setLifted] = useState(false);
+
+  // Sit above the hosting badge whenever one is shown, so it never covers the button.
+  useEffect(() => {
+    const check = () => setLifted(!!document.getElementById(HOST_BADGE_ID));
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(document.body, { childList: true });
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="no-print fixed bottom-5 right-5 z-30">
+    <div className={cn("no-print fixed right-5 z-30 transition-[bottom] duration-300", lifted ? "bottom-[5.25rem]" : "bottom-5")}>
       {open && (
         <div className="mb-3 w-72 animate-rise rounded-3xl border border-line bg-paper p-5 shadow-[0_30px_60px_-30px_rgba(31,36,30,0.5)]">
           <p className="font-display text-xl">How can we help?</p>
